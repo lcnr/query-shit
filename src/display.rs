@@ -11,6 +11,8 @@ impl DisplayFormula<'_> {
     fn recurse(&self, n: &Formula, prec: usize) -> String {
         use Formula::*;
         let (p, c, children) = match n {
+            And(nodes) if nodes.is_empty() => return "⊤".to_string(),
+            Or(nodes) if nodes.is_empty() => return "⊥".to_string(), 
             And(ref nodes) => (10, '∧', nodes),
             Or(ref nodes) => (8, '∨', nodes),
             Neg(ref node) => return format!("¬{}", self.recurse(node, 4)),

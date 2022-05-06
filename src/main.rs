@@ -12,7 +12,7 @@ fn test_queries(queries: Vec<Query>) {
 }
 
 fn main() {
-    test_queries(vec![Query::ReadComponent("T"), Query::ReadComponent("T")]);
+    /*test_queries(vec![Query::ReadComponent("T"), Query::ReadComponent("T")]);
     test_queries(vec![Query::ReadComponent("T"), Query::WriteComponent("T")]);
     test_queries(vec![
         Query::All(vec![
@@ -21,5 +21,6 @@ fn main() {
         ]),
         Query::All(vec![Query::WriteComponent("B"), Query::Without("A")]),
     ]);
-    test_queries(vec![Query::WriteComponent("T"), Query::ReadComponent("T")]);
+    test_queries(vec![Query::WriteComponent("T"), Query::ReadComponent("T")]);*/
+    test_queries(vec![Query::Any(vec![Query::WriteComponent("A"), Query::WriteComponent("B")]), Query::WriteComponent("A")]);
 }
