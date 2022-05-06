@@ -13,13 +13,6 @@ impl DisplayFormula<'_> {
         let (p, c, children) = match n {
             And(ref nodes) => (10, '∧', nodes),
             Or(ref nodes) => (8, '∨', nodes),
-            Implies(ref lhs, ref rhs) => {
-                return format!(
-                    "({} -> {})",
-                    self.recurse(lhs, usize::MAX),
-                    self.recurse(rhs, usize::MAX)
-                )
-            }
             Neg(ref node) => return format!("¬{}", self.recurse(node, 4)),
             &Var(id) => {
                 let var = self.variables.get_index(id).unwrap();

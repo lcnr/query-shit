@@ -4,6 +4,7 @@ use indexmap::IndexSet;
 
 mod display;
 
+#[derive(Debug)]
 pub enum Query {
     All(Vec<Query>),
     Any(Vec<Query>),
@@ -12,13 +13,11 @@ pub enum Query {
     WriteComponent(&'static str),
 }
 
-
 #[derive(Debug)]
 pub enum Formula {
     And(Vec<Formula>),
     Or(Vec<Formula>),
     Neg(Box<Formula>),
-    Implies(Box<Formula>, Box<Formula>),
     Var(usize),
 }
 
@@ -28,19 +27,18 @@ impl Formula {
             Formula::And(inner) => inner.iter().all(|f| f.holds(assignment)),
             Formula::Or(inner) => inner.iter().any(|f| f.holds(assignment)),
             Formula::Neg(inner) => !inner.holds(assignment),
-            Formula::Implies(lhs, rhs) => !lhs.holds(assignment) || rhs.holds(assignment),
             &Formula::Var(var) => assignment[var],
         }
     }
 
-    pub fn falsify(&self, variables: &IndexSet<Variable>) -> Option<Vec<bool>> {
+    pub fn compute_assignment(&self, variables: &IndexSet<Variable>) -> Option<Vec<bool>> {
         for assign in 0..(1 << variables.len()) {
             let mut assignment = Vec::new();
             for i in 0..variables.len() {
-                 assignment.push(assign & (1 << i) != 0);
+                assignment.push(assign & (1 << i) != 0);
             }
 
-            if !self.holds(&assignment) {
+            if self.holds(&assignment) {
                 return Some(assignment);
             }
         }
